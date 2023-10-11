@@ -25,9 +25,14 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['auth', 'cancerbero']], function () {
     Route::get('/', ['as' => 'index.index', 'uses' => 'HomeController@index']);
-
+    //RRHH
     Route::namespace('RRHH')->prefix('rrhh')->name('rrhh.')->group(function(){
         Route::resource('empleados', 'EmpleadosController', ['only' => ['index', 'edit', 'store', 'detail', 'update']]);
+    });
+    //SOLICITUDES
+    Route::namespace('Solicitudes')->prefix('solicitudes')->name('solicitudes.')->group(function(){
+        Route::resource('ausencias', 'AusenciaController', ['only' => ['index', 'update', 'edit', 'data', 'store', 'create']]);
+        Route::resource('autorizacion-ausencias', 'AutorizacionAusenciaController', ['only' => ['index', 'update', 'edit', 'data']]);
     });
 
     Route::namespace ('Productos')->prefix('productos')->name('productos.')->group(function () {
@@ -40,6 +45,7 @@ Route::group(['middleware' => ['auth', 'cancerbero']], function () {
     Route::namespace ('Inventarios')->prefix('inventarios')->name('inventarios.')->group(function () {
         Route::resource('sucursales', 'SucursalesController', ['only' => ['index', 'update', 'edit', 'data', 'store', 'create']]);
         Route::resource('lote-inventario', 'LoteInventarioController', ['only' => ['index', 'update', 'edit', 'data']]);
+       // Route::resource('ausencias-solicitud', 'AusenciasController', ['only' => ['index', 'update', 'edit', 'data', 'store', 'create']]);
     });
 
     Route::namespace ('Socios')->prefix('socios')->name('socios.')->group(function () {

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Catalogs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
-use App\Models\CincoCalles\ControlAcceso;
-use App\Models\CincoCalles\Serie;
-use App\Models\CincoCalles\Sucursal;
+use App\Models\TConsulting\ControlAcceso;
+use App\Models\TConsulting\Serie;
+use App\Models\TConsulting\Sucursal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

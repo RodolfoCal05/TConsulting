@@ -5,9 +5,8 @@ namespace App\Models\TConsulting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoFamilia extends Model
+class TipoSolicitude extends Model
 {
-    use HasFactory;
+    protected $table = 'tipo_solicitudes';
     protected $guarded = ['id'];
-    public $timestamps = true;
 }

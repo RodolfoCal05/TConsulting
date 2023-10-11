@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ascenso extends Model
 {
-    use HasFactory;
+    //protected $connection = 'tconsulting';
+    protected $table = 'ascensos';
+    protected $guarded = ['id'];
 }
