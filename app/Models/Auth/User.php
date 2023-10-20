@@ -1,6 +1,8 @@
 <?php
 namespace App\Models\Auth;
 
+use App\Models\TConsulting\Empleado;
+use App\Models\Tconsulting\Empresa;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,5 +29,15 @@ class User extends Authenticatable
     public function roleIds()
     {
         return $this->roles->pluck('id')->toArray();
+    }
+
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class, 'cue', 'cue');
+    }
+
+    public function empresa()
+    {
+        return $this->hasOne(Empresa::class, 'id', 'empresa_id');
     }
 }

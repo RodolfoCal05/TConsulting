@@ -15,7 +15,7 @@ class Empleado extends Model
     protected $appends = ['nombre_completo'];
 
     public function getNombreCompletoAttribute(){
-        return $this->nombre1.' '. $this->nombre2.' '. $this->nombre3.' '. $this->apellido1.' '. $this->apellido2.' '. $this->apellido3;
+        return $this->cue.' - '. $this->nombre1.' '. $this->nombre2.' '. $this->nombre3.' '. $this->apellido1.' '. $this->apellido2.' '. $this->apellido3;
     }
 
     public function empresa(){

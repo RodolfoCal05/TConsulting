@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\TConsulting;
+namespace App\Models\Ventas;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lote extends Model
+class Venta extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
     public $timestamps = false;
+    
 }

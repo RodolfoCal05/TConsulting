@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Solicitudes;
 
+use App\Models\TConsulting\DescuentoEmpleado;
 use App\Models\TConsulting\SolicitudAusencia;
 use App\Models\TConsulting\TipoAusencia;
+use Carbon\Carbon;
 use Csgt\Crud\CrudController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AutorizacionAusenciaController extends CrudController
 {
@@ -34,9 +38,9 @@ class AutorizacionAusenciaController extends CrudController
                 ]),
             ]);
             $this->setField([
-                'name'       => 'Tipo Ausencia',
-                'field'      => 'tipo_ausencia_id',
-                'type'       => 'combobox',
+                'name' => 'Tipo Ausencia',
+                'field' => 'tipo_ausencia_id',
+                'type' => 'combobox',
                 'collection' => TipoAusencia::select('id', 'descripcion')->get(),
             ]);
 
@@ -44,5 +48,39 @@ class AutorizacionAusenciaController extends CrudController
         });
 
         $this->setPermissions("\Cancerbero::crudPermissions", 'solicitudes.autorizacion-ausencias');
+    }
+
+    public function update(Request $request, $aId)
+    {
+        if ($request->tipo_ausencia_id == 1) {
+
+            DB::beginTransaction();
+
+            try {
+                $solicitud = SolicitudAusencia::FindOrFail(decrypt($aId));
+
+                $datosSueldo = DB::select('CALL sueldo_por_dia(?)', [$solicitud->cue]);
+
+                if (!$datosSueldo[0]->sueldo_por_dia) {
+                    abort(403, "Empleado sin Sueldo, favor de comunicarse con Sistemas...");
+                }
+
+                $descuento = new DescuentoEmpleado;
+                $descuento->cue = $solicitud->cue;
+                $descuento->estado = 'GRABADO';
+                $descuento->monto = $datosSueldo[0]->sueldo_por_dia;
+                $descuento->tipo_descuento_id = 2;
+                $descuento->fecha = Carbon::now()->format('Y-m-d');
+                $descuento->user_id = auth()->user()->id;
+                $descuento->save();
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                throw $th;
+            }
+
+        }
+        return parent::update($request, $aId);
     }
 }

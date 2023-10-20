@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\CincoCalles;
+namespace App\Models\Bodegas;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     use HasFactory;
+    protected $table = 'productos';
     protected $guarded = ['id'];
 
     public function precio()
