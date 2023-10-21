@@ -322,7 +322,15 @@ export default {
           console.log(response.data);
           this.montoDisponible = parseInt(response.data);
         })
-        .catch((error) => this.HandleError(error));
+        .catch((error) => {
+          if (error.response.data.status != 422) {
+            // error. objeto response.objeto data. el mensaje que viene del controller, "icono del error", "tiempo en mostrar"
+            Swal.fire({
+              text: error.response.data.message,
+              icon: "warning",
+            });
+          }
+        });
     },
     buscarProducto() {
       const datos = {
@@ -337,7 +345,14 @@ export default {
           console.log(response.data);
           this.formDetalle.producto = response.data[0];
         })
-        .catch((error) => this.HandleError(error));
+        .catch((error) => {
+          if (error.response.data.status != 422) {
+            Swal.fire({
+              text: error.response.data.message,
+              icon: "warning",
+            });
+          }
+        });
     },
     agregarDetalle() {
       if (this.formDetalle.producto.id == null) {

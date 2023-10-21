@@ -68,7 +68,7 @@ class VentaController extends Controller
             $venta->cue_solicita = $datos['solicita']['cue'];
             $venta->bodega_id = $datos['bodega']['id'];
             $venta->tipo_pago_id = $datos['pago']['id'];
-            $venta->estado =  $datos['estado'];
+            $venta->estado = $datos['estado'];
             $venta->fecha = $fecha;
             $venta->save();
 
@@ -79,17 +79,17 @@ class VentaController extends Controller
                 $vd->precio = $detalle['producto']['precio'];
                 $vd->cantidad = $detalle['cantidad'];
                 $vd->total = ($detalle['producto']['precio'] * $detalle['cantidad']);
-                $vd->estado =  $datos['estado'];
+                $vd->estado = $datos['estado'];
                 $vd->save();
                 $total += $vd->total;
 
                 $inventario = InventarioDetalle::where('inventario_id', $datos['bodega']['inventario_id'])
-                ->where('producto_id', $detalle['producto']['id'])
-                ->first();
+                    ->where('producto_id', $detalle['producto']['id'])
+                    ->first();
 
-                if ( $datos['estado'] === 'GRABADO') {
+                if ($datos['estado'] === 'GRABADO') {
                     $inventario->existencia = ($inventario->existencia - $detalle['cantidad']);
-                }else{
+                } else {
                     $inventario->existencia = ($inventario->existencia + $total);
                 }
                 $inventario->save();
@@ -100,13 +100,13 @@ class VentaController extends Controller
 
                 $descuento = new DescuentoEmpleado;
                 $descuento->cue = $venta->cue_solicita;
-                if ( $datos['estado'] === 'GRABADO') {
+                if ($datos['estado'] === 'GRABADO') {
                     $descuento->estado = 'PENDIENTE';
                     $descuento->monto = $total;
 
                     $disponible->monto_restante = ($disponible->monto_restante - $total);
-                }else{
-                    $descuento->estado =  $datos['estado'];
+                } else {
+                    $descuento->estado = $datos['estado'];
                     $descuento->monto = ($total * -1);
 
                     $disponible->monto_restante = ($disponible->monto_restante + $total);
@@ -148,7 +148,7 @@ class VentaController extends Controller
             case 'disponibleEmpleado':
                 $disponible = self::disponible($datos->cue);
                 if (!$disponible) {
-                    abort(404, "Empleado sin monto disponible, favor de comunicarse con Sistemas...");
+                    abort(403, "Empleado sin monto disponible, favor de comunicarse con Sistemas...");
                 }
                 return response()->json($disponible->monto);
                 break;
@@ -165,6 +165,14 @@ class VentaController extends Controller
                             'existencias' => $query->existencia,
                         ];
                     });
+
+                if (count($existecia) == 0) {
+                    abort(403, "Codigo no existe para producto, favor de revisar...");
+                }
+
+                if (intval($existecia[0]['existencias']) === 0) {
+                    abort(403, "Producto sin existencia en bodega, favor de revisar...");
+                }
                 return response()->json($existecia);
                 break;
             default: //datos iniciales

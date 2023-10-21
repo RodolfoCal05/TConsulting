@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             TipoSociosSeeder::class,
             SeriesSeeder::class,
             FidelizacionesSeeder::class,
+            VentaComisiones::class,
+            TipoFamiliasSeeder::class,
         ]);
         Schema::enableForeignKeyConstraints();
     }
